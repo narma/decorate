@@ -1,2 +1,5 @@
+pom.xml
+Manifest.txt
+lib
 classes/*
 decorate.jar
