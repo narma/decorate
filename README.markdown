@@ -1,4 +1,4 @@
-This is a small library for Compojure that allows defined functions to
+This is a small library that allows defined functions to
 be enhanced by decorator functions.
 
 For example, here is a logging decorator function:
@@ -27,5 +27,5 @@ more decorators.
 `(decorate-with decorator & funcs)` - wrap many functions in the
 same decorator.
 
-`(decorate-bind decorator funcs & body)` - wrap many functions in
+`(decorate-local decorator funcs & body)` - wrap many functions in
 same decorator for a bounded scope.

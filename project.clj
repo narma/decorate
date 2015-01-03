@@ -1,3 +1,4 @@
-(defproject decorate "0.1.0-SNAPSHOT"
-  :description "A small library for Compojure that allows defined functions
-    to be enhanced by decorator functions.")
+(defproject decorate "0.1.1"
+  :description "A small library that allows defined functions
+    to be enhanced by decorator functions."
+  :dependencies [[org.clojure/clojure "1.6.0"]])

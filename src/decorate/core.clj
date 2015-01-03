@@ -1,4 +1,4 @@
-;; Copyright (c) James Reeves. All rights reserved.
+;; Copyright (c) James Reeves, Sergey Rublev. All rights reserved.
 ;; The use and distribution terms for this software are covered by the Eclipse
 ;; Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php) which
 ;; can be found in the file epl-v10.html at the root of this distribution. By
@@ -6,7 +6,7 @@
 ;; terms of this license. You must not remove this notice, or any other, from
 ;; this software.
 
-(ns decorate
+(ns decorate.core
   "Macros for redefining functions with decorators.")
 
 (defmacro redef
@@ -22,15 +22,17 @@
   [func & decorators]
   `(redef ~func (-> ~func ~@decorators)))
 
+
 (defmacro decorate-with
   "Wrap multiple functions in a single decorator."
   [decorator & funcs]
   `(do ~@(for [f funcs]
-          `(redef ~f (~decorator ~f)))))
+          `(redef ~f (-> ~f ~decorator)))))
 
-(defmacro decorate-bind
+(defmacro decorate-local
   "Wrap named functions in a decorator for a bounded scope."
   [decorator funcs & body]
-  `(binding
-     [~@(mapcat (fn [f] [f (list decorator f)]) funcs)]
+  `(let
+     [~@(mapcat (fn [f] [f `(-> ~f ~decorator)]) funcs)]
      ~@body))
+
