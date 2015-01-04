@@ -1,7 +1,7 @@
 # Decorator
 Inspired by Python decorators.
+But decorators are just a subset of high-order functions.
 Following examples in clean clojure w/o any libs show how it works.
-
 
 Example of simple decorator which is calling original fn
 
@@ -54,6 +54,8 @@ and the rest part is arguments for fn which produces a real decorator.
 
 First case, define decorator without arguments:
 ```clojure
+(require '[decorate.core :refer [defdecorator]])
+
 (defdecorator with-logging
   [f] [& args]
   (println "Entering")
@@ -75,8 +77,8 @@ Second case, define decorator with arguments
 ## Utility macros
 
 `(redef name value)` - redefine a var without losing its metadata.
-
 `(decorate fn decorator)` - redefine a var fn with applied decorator
+`(ns-decorate fn decorator)` - intern the new function to ns with decorated value
 
 
 ## More examples

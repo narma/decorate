@@ -37,3 +37,10 @@
   [f decorator]
   `(redef ~f (~decorator ~f)))
 
+(defmacro ns-decorate
+  "Intern the new function to ns with decorated value"
+  [f decorator]
+  `(let [m# (meta #'~f)
+         ns# (:ns m#)
+         name# (:name m#)]
+    (intern ns# name# (~decorator ~f))))
