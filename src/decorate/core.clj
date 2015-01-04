@@ -1,13 +1,28 @@
-;; Copyright (c) James Reeves, Sergey Rublev. All rights reserved.
-;; The use and distribution terms for this software are covered by the Eclipse
-;; Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php) which
-;; can be found in the file epl-v10.html at the root of this distribution. By
-;; using this software in any fashion, you are agreeing to be bound by the
-;; terms of this license. You must not remove this notice, or any other, from
-;; this software.
-
 (ns decorate.core
-  "Macros for redefining functions with decorators.")
+  "Macros for redefining functions and defining decorators.")
+
+
+(defmacro defdecorator
+  "define decorators in two ways: w & w/o args
+  1) (defdecorator
+        [original-function] ;; one argument
+        [& original-functions-args]
+          ... body)
+  2) (defdecorator
+        [original-function a b] ;; many arguments, or
+                                ;; [f & dargs] for ex.
+        [& original-functions-args]
+          ... body)"
+  [name' decorator-args func-args & body]
+  (if (= 1
+         (count decorator-args))
+    `(defn ~name'
+       ~decorator-args
+       (fn ~func-args ~@body))
+    `(defn ~name'
+       ~(subvec decorator-args 1)
+       (fn [~(first decorator-args)]
+         (fn ~func-args ~@body)))))
 
 (defmacro redef
   "Redefine an existing value, keeping the metadata intact."
@@ -18,21 +33,7 @@
      v#))
 
 (defmacro decorate
-  "Wrap a function in one or more decorators."
-  [func & decorators]
-  `(redef ~func (-> ~func ~@decorators)))
-
-
-(defmacro decorate-with
-  "Wrap multiple functions in a single decorator."
-  [decorator & funcs]
-  `(do ~@(for [f funcs]
-          `(redef ~f (-> ~f ~decorator)))))
-
-(defmacro decorate-local
-  "Wrap named functions in a decorator for a bounded scope."
-  [decorator funcs & body]
-  `(let
-     [~@(mapcat (fn [f] [f `(-> ~f ~decorator)]) funcs)]
-     ~@body))
+  "Redefine fn var with applied decorator to fn"
+  [f decorator]
+  `(redef ~f (~decorator ~f)))
 
