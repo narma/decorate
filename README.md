@@ -5,7 +5,7 @@ Following examples in clean clojure w/o any libs show how it works.
 
 Example of simple decorator which is calling original fn
 
-```
+```clojure
 (defn mydecorator
   [f] ; takes fn
   (fn [& args] ; returns fn which will be invoked instead of f
@@ -17,7 +17,7 @@ Example of simple decorator which is calling original fn
 ```
 
 A little more complex, this function returns decorator
-```
+```clojure
 (defn mydecorator-with-args
   [& decorator-args]
   (fn [f] ;; decorator, takes fn
@@ -29,14 +29,14 @@ A little more complex, this function returns decorator
 
 We can compose decorators with `comp`
 
-```
+```clojure
 (def my-super-decorator (comp (mydecorator-with-args "hello") mydecorator))
 ```
 
 # Defdecorator macro
 
 Signature
-```
+```clojure
 (defdecorator name
   [original-func decorator-args?]
   [original-func-args] body)
@@ -53,7 +53,7 @@ and the rest part is arguments for fn which produces a real decorator.
 
 
 First case, define decorator without arguments:
-```
+```clojure
 (defdecorator with-logging
   [f] [& args]
   (println "Entering")
@@ -64,7 +64,7 @@ First case, define decorator without arguments:
 
 Second case, define decorator with arguments
 
-```
+```clojure
 (defdecorator with-logging
   [f v] [& args]
   (println "Hello there " v)
